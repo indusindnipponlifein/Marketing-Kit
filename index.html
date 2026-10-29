@@ -1,36 +1,31 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>London Training Convention</title>
+<title>MDRT Earning Opportunity</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
+
 <style>
 :root{
-  --navy-deep:#0F2A4A;
-  --navy-night:#050D1A;
-  --red-error:#FF6E7C;
-  --ink:#10202E;
-  --white:#FFFFFF;
-  --success:#3FDC9B;
-  --gold-deep:#B8862E;  /* sampled directly from the poster's "2026" shadow tone */
-  --gold:#E3B54F;       /* sampled from the poster's mid-tone gold */
-  --gold-light:#F6DFA0; /* sampled from the poster's highlight gold */
+  --maroon:#6E1423;
+  --maroon-deep:#4A0F1C;
+  --red:#C8323F;
+  --red-error:#A11A2B;
+  --grey:#5B534F;
+  --grey-soft:#8C8582;
+  --line:#E4DFDD;
+  --paper:#FFFFFF;
+  --success:#2A7F5F;
+  --font-display:'Instrument Serif', Georgia, serif;
   --font-body:'IBM Plex Sans', -apple-system, 'Segoe UI', sans-serif;
-  --font-display:'Cinzel', Georgia, serif;
-
-  /* ==========================================================
-     POSTER BACKGROUND — this is the only line you need to touch.
-     Right now it points at the local file sitting next to this
-     HTML file. Once you have your final hosted image link, just
-     replace the url() below with it, e.g.:
-     --hero-bg-image: url('https://yourdomain.com/poster.jpg');
-     ========================================================== */
-  --hero-bg-image: url('https://iili.io/nF0X6ZB.png');
 }
+
 *{margin:0;padding:0;box-sizing:border-box;}
+
 html,body{height:100%;}
 
 body{
@@ -38,761 +33,313 @@ body{
   min-height:100vh;
   overflow-x:hidden;
   font-family:var(--font-body);
-  background-color:var(--navy-night);
+  color:var(--grey);
+  background:var(--maroon-deep);
 }
 
-/* ---- The poster now lives in its OWN fixed, viewport-sized layer
-   instead of being a body background with background-attachment:fixed.
-   That property is unreliable on mobile browsers — when the page's
-   scrollable content grows taller (e.g. the download buttons appear),
-   some mobile browsers recompute the "fixed" background against the
-   new, taller document instead of the viewport, which is exactly what
-   was pushing the poster (and the countdown sitting on it) upward.
-   A position:fixed; inset:0 element is sized purely by the viewport,
-   never by page content, so its size and position can't drift no
-   matter how tall the card below gets. ---- */
-.hero-bg{
-  position:fixed;inset:0;z-index:0;pointer-events:none;
-  background-image:var(--hero-bg-image);
-  background-size:contain;
-  background-position:top center;
-  background-repeat:no-repeat;
-  background-color:var(--navy-night);
+/* Background image - unchanged */
+.bg-photo{
+  position:fixed;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  background:linear-gradient(160deg,var(--maroon) 0%,var(--maroon-deep) 100%);
 }
 
-/* a soft vignette ON the poster (not a second background) purely to
-   keep the gold text and glass card readable against the artwork */
+.bg-photo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  object-position:center top;
+  display:block;
+}
+
 .bg-overlay{
-  position:fixed;inset:0;z-index:1;pointer-events:none;
+  position:absolute;
+  inset:0;
   background:
-    linear-gradient(180deg, rgba(2,5,9,.22) 0%, rgba(2,5,9,0) 22%, rgba(2,5,9,0) 62%, rgba(2,5,9,.5) 100%);
+    linear-gradient(180deg, rgba(74,15,28,0) 0%, rgba(74,15,28,0) 55%, rgba(35,8,17,.35) 100%);
+}
+
+/* Layout - card remains fixed */
+.stage{
+  position:relative;
+  z-index:2;
+  min-height:100vh;
+}
+
+/* Form card - fixed at the bottom */
+.card{
+  position:fixed;
+  z-index:2;
+  left:50%;
+  bottom:12vh;
+  transform:translateX(-50%);
+  width:calc(100% - 40px);
+  max-width:420px;
+  background:rgba(255,255,255,.96);
+  -webkit-backdrop-filter:blur(8px);
+  backdrop-filter:blur(8px);
+  border-radius:14px;
+  overflow:hidden;
+  padding:36px 30px 30px;
+  text-align:center;
+  box-shadow:0 22px 50px rgba(20,4,9,.35);
+  animation:rise .7s ease both;
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:4px;
+  background:linear-gradient(90deg,var(--maroon) 0%,var(--maroon) 70%,var(--red) 100%);
+}
+
+@keyframes rise{
+  from{opacity:0;transform:translate(-50%,14px);}
+  to{opacity:1;transform:translate(-50%,0);}
 }
 
 .sr-only{
-  position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;
-  clip:rect(0,0,0,0);white-space:nowrap;border:0;
-}
-
-/* celebratory confetti, one burst on load */
-.confetti{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:5;}
-.confetti span{position:absolute;top:-8%;width:7px;height:13px;opacity:0;border-radius:1px;animation:confettiFall 3.4s ease-in forwards;}
-@keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}85%{opacity:1;}100%{transform:translateY(72vh) rotate(340deg);opacity:0;}}
-.confetti span:nth-child(1){left:6%;background:var(--gold);animation-delay:.10s;}
-.confetti span:nth-child(2){left:14%;background:var(--white);animation-delay:.50s;}
-.confetti span:nth-child(3){left:22%;background:var(--gold-light);animation-delay:.15s;}
-.confetti span:nth-child(4){left:30%;background:var(--white);animation-delay:.65s;}
-.confetti span:nth-child(5){left:38%;background:var(--gold-deep);animation-delay:.30s;}
-.confetti span:nth-child(6){left:46%;background:var(--white);animation-delay:.05s;}
-.confetti span:nth-child(7){left:54%;background:var(--gold-light);animation-delay:.45s;}
-.confetti span:nth-child(8){left:62%;background:var(--white);animation-delay:.20s;}
-.confetti span:nth-child(9){left:70%;background:var(--gold);animation-delay:.55s;}
-.confetti span:nth-child(10){left:78%;background:var(--white);animation-delay:.35s;}
-.confetti span:nth-child(11){left:86%;background:var(--gold-deep);animation-delay:.10s;}
-.confetti span:nth-child(12){left:94%;background:var(--white);animation-delay:.50s;}
-.confetti span:nth-child(13){left:50%;background:var(--gold);animation-delay:.60s;}
-.confetti span:nth-child(14){left:18%;background:var(--white);animation-delay:.40s;}
-
-/* ---- CONTENT — everything sits in one column over the fixed poster,
-   starting right where the artwork's own "CONVENTION NOVEMBER 2026"
-   line ends and flowing down from there. Because .hero-bg is now its
-   own fixed, viewport-only layer (see above), this padding-top will
-   always land the countdown in the same spot on the poster, no matter
-   how the card below grows or shrinks. ---- */
-.page{
-  position:relative;z-index:2;
-  min-height:100vh;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:85vw 24px 48px;
-  text-align:center;
-}
-@media (min-aspect-ratio: 1364/2395){
-  .page{padding-top:48vh;}
-}
-
-/* ---- Countdown: three glass stat tiles (days / hours / minutes)
-   instead of a single pill, so the number itself is the hero moment
-   rather than a caption. When the date has passed, the tiles are
-   swapped for a single message pill instead. ---- */
-.countdown-wrap{animation:rise .7s ease both;}
-.countdown-label{
-  font-family:var(--font-display);font-weight:600;font-size:.7rem;letter-spacing:.24em;text-transform:uppercase;
-  color:var(--gold-light);opacity:.9;margin-bottom:12px;text-shadow:0 2px 8px rgba(2,5,9,.65);
-}
-.countdown-stats{display:flex;align-items:center;justify-content:center;gap:9px;}
-.stat-box{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  width:66px;height:66px;border-radius:15px;
-  background:
-    linear-gradient(165deg, rgba(255,255,255,.15), rgba(255,255,255,.03) 40%, transparent 70%),
-    linear-gradient(180deg, rgba(17,36,60,.55), rgba(6,14,26,.8));
-  backdrop-filter:blur(16px) saturate(170%);
-  -webkit-backdrop-filter:blur(16px) saturate(170%);
-  border:1px solid rgba(227,181,79,.5);
-  box-shadow:0 10px 22px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.14);
-}
-.stat-num{
-  font-family:var(--font-display);font-weight:700;font-size:1.55rem;line-height:1;color:var(--gold-light);
-  text-shadow:0 2px 8px rgba(2,5,9,.5);
-  font-variant-numeric:tabular-nums;
-}
-.stat-label{
-  margin-top:5px;font-family:var(--font-body);font-weight:600;font-size:.6rem;letter-spacing:.1em;
-  color:rgba(246,223,160,.75);
-}
-.stat-sep{font-family:var(--font-display);font-weight:600;color:rgba(227,181,79,.5);font-size:1.25rem;}
-.countdown-done{
-  display:inline-flex;align-items:center;gap:10px;
-  background:linear-gradient(135deg, rgba(17,36,60,.62), rgba(6,14,26,.78));
-  backdrop-filter:blur(14px) saturate(160%);
-  -webkit-backdrop-filter:blur(14px) saturate(160%);
-  color:var(--gold-light);font-family:var(--font-display);font-weight:600;font-size:.92rem;letter-spacing:.1em;
-  padding:11px 26px;border-radius:999px;border:1px solid rgba(227,181,79,.55);
-  box-shadow:0 10px 26px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.14);
-}
-.countdown-done::before{
-  content:"";width:6px;height:6px;border-radius:50%;
-  background:var(--gold-light);box-shadow:0 0 8px 2px rgba(246,223,160,.8);
-  flex-shrink:0;
+  position:absolute;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+  clip:rect(0 0 0 0);
+  white-space:nowrap;
 }
 
 .subcopy{
-  font-family:var(--font-body);font-size:.95rem;line-height:1.6;color:var(--gold-light);
-  max-width:320px;margin:18px auto 0;text-shadow:0 2px 10px rgba(2,5,9,.7);
-  animation:rise .8s .1s ease both;
+  font-size:15px;
+  line-height:1.55;
+  color:var(--grey);
+  max-width:320px;
+  margin:0 auto 20px;
 }
 
-/* Two typographic motifs lifted straight from the poster itself, so the
-   card reads as a continuation of the artwork rather than a bolted-on
-   app panel: a hairline rule flanking a small gold diamond either side
-   of a short caption (matching "◆ 2026 ◆"), and a plainer rule-flanked
-   caption with no diamonds (matching "— TRAINING CONVENTION —"). */
-.divider-gem, .divider-plain{
-  display:flex;align-items:center;justify-content:center;gap:10px;
-  font-family:var(--font-display);text-transform:uppercase;font-weight:600;
-  color:var(--gold-light);
-}
-.divider-gem{font-size:.68rem;letter-spacing:.22em;margin:0 0 18px;opacity:.95;}
-.divider-gem::before,.divider-gem::after{content:"";width:20px;height:1px;background:rgba(227,181,79,.55);}
-.divider-gem .gem{color:var(--gold);font-size:.55rem;}
-.divider-plain{font-size:.8rem;letter-spacing:.16em;}
-.divider-plain::before,.divider-plain::after{content:"";width:26px;height:1px;background:rgba(227,181,79,.55);}
-
-/* the entry card — a frosted glass panel, layered like real glass:
-   a faint gradient sheen, blur, a soft gold edge, and a thin
-   specular highlight along the top so it reads as premium, not just
-   "translucent rectangle" */
-.card{
-  position:relative;z-index:1;width:100%;
-  background:
-    linear-gradient(165deg, rgba(255,255,255,.09), rgba(255,255,255,.02) 35%, transparent 60%),
-    linear-gradient(180deg, rgba(17,36,60,.48), rgba(6,14,26,.74));
-  backdrop-filter:blur(24px) saturate(170%);
-  -webkit-backdrop-filter:blur(24px) saturate(170%);
-  border:1px solid rgba(227,181,79,.32);
-  border-radius:20px;
-  padding:34px 28px;
-  margin:26px auto 0;max-width:360px;text-align:center;
-  box-shadow:0 28px 60px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.1), inset 0 -1px 0 rgba(0,0,0,.25);
-  animation:rise .9s .2s ease both;
-}
-.card::before{
-  content:"";position:absolute;top:0;left:14%;right:14%;height:1px;
-  background:linear-gradient(90deg, transparent, rgba(255,255,255,.5), transparent);
-}
-.badge{
-  position:absolute;top:-18px;right:-14px;width:50px;height:50px;border-radius:50%;
-  background:linear-gradient(135deg, rgba(17,36,60,.92), rgba(6,14,26,.96));
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  border:1.5px solid rgba(227,181,79,.6);display:flex;align-items:center;justify-content:center;
-  font-size:22px;box-shadow:0 8px 20px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.15);
-  animation:badgeIn .5s .8s cubic-bezier(.34,1.56,.64,1) both;
-  cursor:pointer;appearance:none;-webkit-appearance:none;padding:0;
-  transition:transform .15s ease;
-}
-.badge::after{content:none;}
-.badge:hover{transform:scale(1.08);}
-.badge:active{transform:scale(.94);}
-@keyframes badgeIn{0%{transform:scale(0);opacity:0;}100%{transform:scale(1);opacity:1;}}
-
-/* a small glass toast that pops up when the badge is tapped */
-.toast{
-  position:fixed;left:50%;top:13%;transform:translate(-50%,-8px);
-  z-index:60;pointer-events:none;white-space:nowrap;
-  background:linear-gradient(135deg, rgba(15,32,54,.8), rgba(6,14,26,.88));
-  backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);
-  border:1px solid rgba(227,181,79,.4);border-radius:999px;
-  padding:10px 20px;color:var(--gold-light);
-  font-family:var(--font-display);font-size:13px;font-weight:600;letter-spacing:.02em;
-  box-shadow:0 14px 30px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.12);
-  opacity:0;transition:opacity .35s ease, transform .35s ease;
-}
-.toast.show{opacity:1;transform:translate(-50%,0);}
-
+/* Form */
 .input-wrap{
-  padding:1px;border-radius:13px;margin-bottom:18px;
-  background:rgba(227,181,79,.5);
+  margin-bottom:14px;
 }
+
 input{
-  display:block;width:100%;padding:14px 16px;font-size:16px;font-family:var(--font-body);color:var(--gold-light);
-  border-radius:12px;border:none;outline:none;text-align:center;
-  background:rgba(9,20,35,.55);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  transition:box-shadow .2s ease, background .2s ease;
+  display:block;
+  width:100%;
+  padding:14px 16px;
+  font-size:16px;
+  font-family:var(--font-body);
+  color:var(--maroon-deep);
+  background:#FAF8F8;
+  border:1px solid var(--line);
+  border-radius:8px;
+  outline:none;
+  text-align:center;
+  transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
 }
-input:focus{box-shadow:0 0 0 4px rgba(227,181,79,.22);background:rgba(9,20,35,.72);}
-input::placeholder{color:rgba(246,223,160,.5);}
-input[aria-invalid="true"]{box-shadow:0 0 0 3px rgba(255,110,124,.45);}
+
+input::placeholder{
+  color:var(--grey-soft);
+}
+
+input:focus{
+  border-color:var(--maroon);
+  background:#fff;
+  box-shadow:0 0 0 3px rgba(110,20,35,.12);
+}
 
 button{
-  position:relative;overflow:hidden;
-  width:100%;padding:15px;border:1px solid rgba(227,181,79,.55);border-radius:11px;cursor:pointer;
-  background:linear-gradient(135deg, rgba(15,42,74,.92), rgba(5,13,26,.96));
-  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
-  color:var(--gold-light);
-  font-family:var(--font-body);font-weight:600;font-size:15px;letter-spacing:.1em;text-transform:uppercase;
-  box-shadow:0 14px 30px rgba(0,0,0,.4), inset 0 1px 0 rgba(255,255,255,.1);
-  transition:transform .2s ease, box-shadow .2s ease;
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:8px;
+  cursor:pointer;
+  background:var(--maroon);
+  color:#fff;
+  font-family:var(--font-body);
+  font-weight:600;
+  font-size:16px;
+  letter-spacing:.02em;
+  transition:background .2s ease, transform .2s ease;
 }
-button::after{
-  content:"";position:absolute;top:0;left:-60%;width:35%;height:100%;
-  background:linear-gradient(120deg, transparent, rgba(227,181,79,.35), transparent);
-  transform:skewX(-20deg);transition:left .6s ease;
+
+button:hover{
+  background:var(--red);
 }
-button:hover::after{left:130%;}
-button:hover{transform:translateY(-2px);box-shadow:0 18px 38px rgba(15,42,74,.5), inset 0 1px 0 rgba(255,255,255,.15);}
-button:active{transform:translateY(0);}
-button:disabled{opacity:.6;cursor:not-allowed;transform:none;box-shadow:none;}
-button:focus-visible, input:focus-visible{outline:2px solid var(--gold-light);outline-offset:2px;}
+
+button:active{
+  transform:translateY(1px);
+}
+
+button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+  background:var(--maroon);
+}
+
+button:focus-visible,
+input:focus-visible{
+  outline:2px solid var(--red);
+  outline-offset:2px;
+}
 
 .loader{
-  display:none;margin-top:16px;align-items:center;justify-content:center;gap:8px;
-  font-family:var(--font-body);font-size:14px;color:var(--gold-light);opacity:.85;
+  display:none;
+  margin-top:16px;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  font-size:14px;
+  color:var(--grey);
 }
-.loader.show{display:flex;}
+
+.loader.show{
+  display:flex;
+}
+
 .spinner{
-  width:14px;height:14px;border:2px solid rgba(227,181,79,.25);border-top-color:var(--gold);
-  border-radius:50%;display:inline-block;animation:spin .8s linear infinite;
-}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-#msg{margin-top:14px;text-align:center;font-weight:600;font-family:var(--font-body);font-size:15px;min-height:0;}
-.success{color:var(--success);}
-.error{color:var(--red-error);}
-
-/* the 4 pdf download buttons, revealed after a successful lookup.
-   Any button whose key is set to false in DOC_AVAILABILITY (see the
-   script) renders in a locked "Coming Soon" state instead. */
-.downloads{
-  display:none;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;
-}
-.downloads.show{display:grid;}
-.dl-btn{
-  display:flex;align-items:center;justify-content:center;gap:7px;text-align:left;padding:13px 10px;border-radius:12px;
-  background:linear-gradient(135deg, rgba(227,181,79,.34), rgba(184,134,46,.2));
-  backdrop-filter:blur(14px) saturate(160%);
-  -webkit-backdrop-filter:blur(14px) saturate(160%);
-  color:var(--gold-light);font-weight:600;font-size:13.5px;text-decoration:none;
-  border:1px solid rgba(227,181,79,.5);
-  box-shadow:0 8px 18px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.12);
-  transition:transform .2s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease, filter .2s ease;
-}
-.dl-btn:hover, .dl-btn:focus-visible{
-  transform:translateY(-2px);
-  background:linear-gradient(135deg, rgba(227,181,79,.46), rgba(184,134,46,.28));
-  box-shadow:0 12px 24px rgba(184,134,46,.3), inset 0 1px 0 rgba(255,255,255,.2);
-}
-.dl-btn svg{flex-shrink:0;width:14px;height:14px;}
-.dl-text{display:flex;flex-direction:column;line-height:1.3;}
-.soon-tag{
-  display:none;margin-top:1px;font-size:9.5px;letter-spacing:.07em;text-transform:uppercase;
-  font-weight:600;color:rgba(246,223,160,.7);
-}
-.dl-btn.disabled{
-  opacity:.5;filter:grayscale(.4);cursor:not-allowed;pointer-events:none;
-  transform:none;box-shadow:none;
-}
-.dl-btn.disabled:hover{transform:none;}
-.dl-btn.disabled .soon-tag{display:block;}
-
-/* closing line — a true page footer. margin-top:auto pushes it to the
-   bottom of .page's flex column: on short content it sits pinned to
-   the bottom of the viewport, on tall content it settles at the very
-   end of the scrollable page — either way, always the last thing on
-   the page, never mid-card. */
-.footer-note{
-  margin-top:auto;
-  padding-top:28px;
-  text-shadow:0 2px 10px rgba(2,5,9,.7);
+  width:14px;
+  height:14px;
+  border:2px solid rgba(110,20,35,.18);
+  border-top-color:var(--maroon);
+  border-radius:50%;
+  display:inline-block;
+  animation:spin .8s linear infinite;
 }
 
-@keyframes rise{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
 
-/* general announcement popup - opens automatically on page load,
-   closed via the corner × button, backdrop tap, or Escape */
-.popup-overlay{
-  display:none;position:fixed;inset:0;z-index:50;align-items:center;justify-content:center;
-  background:rgba(2,5,9,.78);padding:20px;
+#msg{
+  margin-top:14px;
+  text-align:center;
+  font-weight:500;
+  font-size:15px;
 }
-.popup-overlay.show{display:flex;}
-.popup-box{
-  position:relative;
-  background:#fff;border-radius:16px;padding:18px;max-width:480px;width:100%;
-  max-height:85vh;display:flex;flex-direction:column;gap:14px;
-  box-shadow:0 30px 60px rgba(0,0,0,.5);
+
+#msg:empty{
+  margin-top:0;
 }
-.popup-close{
-  position:absolute;top:-14px;right:-14px;width:34px;height:34px;border-radius:50%;
-  border:1px solid rgba(227,181,79,.65);cursor:pointer;
-  background:linear-gradient(135deg, var(--navy-deep), #08182B);color:var(--gold-light);
-  font-size:18px;line-height:1;display:flex;align-items:center;justify-content:center;
-  box-shadow:0 8px 20px rgba(0,0,0,.4);
+
+.success{
+  color:var(--success);
 }
-.popup-close:hover{opacity:.9;}
-.popup-loading{
-  display:flex;align-items:center;justify-content:center;gap:8px;padding:40px 0;
-  font-family:var(--font-body);font-size:14px;color:var(--ink);
-}
-.popup-loading .spinner{border-color:rgba(15,42,74,.2);border-top-color:var(--navy-deep);}
-.popup-box iframe{
-  width:100%;height:55vh;border:none;border-radius:10px;background:#f2f2f2;
-}
-/* the announcement image: object-fit:contain + max-height means the
-   whole image always scales down to fit inside the frame — never
-   cropped, never requiring a scroll to see the rest of it */
-.popup-box img{
-  display:block;width:auto;height:auto;max-width:100%;max-height:70vh;
-  margin:0 auto;border-radius:10px;background:#f2f2f2;object-fit:contain;
+
+.error{
+  color:var(--red-error);
 }
 
 @media (max-width:480px){
-  .card{padding:24px 20px;}
-  .popup-box iframe{height:48vh;}
-  .popup-box img{max-height:55vh;}
+  .card{
+    width:calc(100% - 28px);
+    bottom:10vh;
+    padding:30px 22px 22px;
+  }
+}
+
+/* Prevent the card from extending beyond short screens */
+@media (max-height:500px){
+  .card{
+    bottom:10px;
+    max-height:calc(100vh - 20px);
+    overflow-y:auto;
+    padding-top:26px;
+    padding-bottom:20px;
+  }
+
+  .subcopy{
+    margin-bottom:12px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce){
-  *, *::before, *::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important;}
+  *, *::before, *::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
 }
 </style>
 </head>
+
 <body>
 
-<div class="hero-bg" aria-hidden="true"></div>
-<div class="bg-overlay" aria-hidden="true"></div>
-
-<div class="confetti" aria-hidden="true">
-  <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-  <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+<div class="bg-photo" aria-hidden="true">
+  <img src="https://d2bja440mdt72x.cloudfront.net/thailand-letters/PPTapotrait.png" alt="">
+  <div class="bg-overlay"></div>
 </div>
 
-<h1 class="sr-only">London Training Convention — November 2026 — IndusInd Nippon Life</h1>
-
-<div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-<main class="page">
-  <div class="countdown-wrap" id="countdownWrap">
-    <p class="countdown-label" id="countdownLabel">Counting Down To London 2026</p>
-    <div class="countdown-stats" id="countdownStats" role="status" aria-live="polite">
-      <div class="stat-box"><span class="stat-num" id="cdDays">--</span><span class="stat-label">Days</span></div>
-      <span class="stat-sep" aria-hidden="true">:</span>
-      <div class="stat-box"><span class="stat-num" id="cdHours">--</span><span class="stat-label">Hrs</span></div>
-      <span class="stat-sep" aria-hidden="true">:</span>
-      <div class="stat-box"><span class="stat-num" id="cdMins">--</span><span class="stat-label">Mins</span></div>
-    </div>
-  </div>
-  <p class="subcopy">Enter your registered details below to access your personalised convention documents</p>
-
+<main class="stage">
   <section class="card">
-    <button type="button" class="badge" id="celebrateBadge" aria-label="Tap for a surprise" onclick="celebrateBadge(event)">🎉</button>
 
-    <p class="divider-gem" aria-hidden="true"><span class="gem">◆</span><span>Your Details</span><span class="gem">◆</span></p>
+    <h1 class="sr-only">MDRT Earning Opportunity</h1>
 
-    <form id="lookupForm" novalidate>
-      <label for="input" class="sr-only">Employee ID or Mobile Number</label>
-      <div class="input-wrap">
-        <input
-          id="input"
-          name="input"
-          type="text"
-          inputmode="text"
-          autocapitalize="off"
-          spellcheck="false"
-          placeholder="Employee ID / Mobile No."
-          autocomplete="off"
-          aria-describedby="msg"
-        >
-      </div>
-      <button type="submit" id="btn">Find My Documents</button>
-    </form>
+    <p class="subcopy">
+      Enter your details below to view your personalised experience
+    </p>
 
-    <div class="loader" id="loader" role="status" aria-live="polite"><span class="spinner"></span><span>Searching...</span></div>
-    <div id="msg" role="status" aria-live="polite"></div>
-
-    <div class="downloads" id="downloads">
-      <a class="dl-btn" id="dl1" data-key="f1" href="#" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 1.8h5.2L12 4.6v9.6H4z"/><path d="M9.2 1.8v2.8H12"/><path d="M6 8.4h4M6 10.6h4"/></svg>
-        <span class="dl-text"><span class="dl-label">CEO's Note</span><span class="soon-tag">Coming Soon</span></span>
-      </a>
-      <a class="dl-btn" id="dl2" data-key="f2" href="#" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 1.5 1.7 6.4l4.2 1.6"/><path d="M14.5 1.5 9.6 14.3l-3.7-6.3 8.6-6.5z"/></svg>
-        <span class="dl-text"><span class="dl-label">Travel Tickets</span><span class="soon-tag">Coming Soon</span></span>
-      </a>
-      <a class="dl-btn" id="dl3" data-key="f3" href="#" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="12" height="11" rx="1.3"/><path d="M2 6.4h12"/><path d="M5.4 1.6v2.4M10.6 1.6v2.4"/></svg>
-        <span class="dl-text"><span class="dl-label">Itinerary</span><span class="soon-tag">Coming Soon</span></span>
-      </a>
-      <a class="dl-btn" id="dl4" data-key="f4" href="#" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M1.6 13V4.4"/><path d="M1.6 10.4h12.8v2.6"/><path d="M3.8 10.4V6.8h6.8a1.8 1.8 0 0 1 1.8 1.8v1.8"/></svg>
-        <span class="dl-text"><span class="dl-label">Accommodation</span><span class="soon-tag">Coming Soon</span></span>
-      </a>
+    <div class="input-wrap">
+      <input
+        id="input"
+        placeholder="Advisor code / SAP ID / Mobile No."
+        autocomplete="off"
+      >
     </div>
-  </section>
 
-  <p class="footer-note divider-plain">See You In London</p>
+    <button onclick="searchDoc()" id="btn">
+      Click to view &amp; download!
+    </button>
+
+    <div class="loader" id="loader">
+      <span class="spinner"></span>
+      <span>Searching...</span>
+    </div>
+
+    <div id="msg"></div>
+
+  </section>
 </main>
 
-<div class="popup-overlay" id="popupOverlay" role="dialog" aria-modal="true" aria-label="Announcement" onclick="if(event.target===this)closePopup()">
-  <div class="popup-box">
-    <button type="button" class="popup-close" onclick="closePopup()" aria-label="Close announcement">✕</button>
-    <div class="popup-loading" id="popupLoading"><span class="spinner"></span><span>Loading announcement...</span></div>
-    <img id="popupImage" alt="Announcement" style="display:none;">
-    <iframe id="popupFrame" src="" title="Notice" style="display:none;"></iframe>
-  </div>
-</div>
-
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbyEda91TPI9tNMYizYfTcgnRpNb1UvSzMyWfbdHIIhBW8OLQ6oUz-AMrZizOXPbxn8/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbyq1Yuh4HqzN_PCKePsK4_az1IXYAzkt56rTv8TXun6Y_Dv1kJAl2_8J2wGqQKdNnqj/exec";
 
-// TODO: confirm this against the poster (it currently reads November 2026)
-const CONVENTION_DATE=new Date("2026-11-24T00:00:00");
-
-/* ============================================================
-   DOCUMENT AVAILABILITY — flip a key to true once that document
-   is ready to launch. Anything left false renders as a locked
-   "Coming Soon" button (greyed out, not clickable) instead of a
-   working download link, even after a successful lookup.
-     f1 = CEO's Note        f2 = Travel Tickets
-     f3 = Itinerary         f4 = Accommodation
-   ============================================================ */
-const DOC_AVAILABILITY={
-  f1:true,
-  f2:false,
-  f3:false,
-  f4:false
-};
-
-/* Calendar-day difference (local midnight to local midnight) — used
-   only to pick which badge-tap message pool feels right (upcoming /
-   tomorrow / today / past). */
-function getDaysRemaining(){
-  const now=new Date();
-  const startOfToday=new Date(now.getFullYear(),now.getMonth(),now.getDate());
-  const startOfTarget=new Date(CONVENTION_DATE.getFullYear(),CONVENTION_DATE.getMonth(),CONVENTION_DATE.getDate());
-  const diffMs=startOfTarget-startOfToday;
-  return Math.round(diffMs/(1000*60*60*24));
-}
-
-/* The actual live countdown — real time remaining, broken into
-   days / hours / minutes, updated every 20s. Once the date has
-   passed, the three tiles are replaced with a single message pill. */
-function updateCountdown(){
-  const wrap=document.getElementById("countdownWrap");
-  const label=document.getElementById("countdownLabel");
-  const statsBox=document.getElementById("countdownStats");
-  let donePill=document.getElementById("countdownDone");
-
-  const diffMs=CONVENTION_DATE-new Date();
-
-  if(diffMs<=0){
-    statsBox.style.display="none";
-    label.style.display="none";
-    if(!donePill){
-      donePill=document.createElement("div");
-      donePill.id="countdownDone";
-      donePill.className="countdown-done";
-      wrap.appendChild(donePill);
-    }
-    donePill.style.display="inline-flex";
-    donePill.textContent=getDaysRemaining()===0 ? "Today's The Day" : "See You In London";
-    return;
-  }
-
-  if(donePill) donePill.style.display="none";
-  label.style.display="block";
-  statsBox.style.display="flex";
-
-  const days=Math.floor(diffMs/86400000);
-  const hours=Math.floor((diffMs%86400000)/3600000);
-  const mins=Math.floor((diffMs%3600000)/60000);
-
-  document.getElementById("cdDays").textContent=days;
-  document.getElementById("cdHours").textContent=String(hours).padStart(2,"0");
-  document.getElementById("cdMins").textContent=String(mins).padStart(2,"0");
-}
-
-let lastFocusedEl=null;
-
-function closePopup(){
-  document.getElementById("popupOverlay").classList.remove("show");
-  document.getElementById("popupFrame").src="";
-  document.getElementById("popupImage").src="";
-  document.removeEventListener("keydown", onPopupKeydown);
-  if(lastFocusedEl && typeof lastFocusedEl.focus==="function"){
-    lastFocusedEl.focus();
-  }
-}
-
-function onPopupKeydown(e){
-  if(e.key==="Escape"){
-    closePopup();
-  }
-}
-
-function openPopup(){
-  lastFocusedEl=document.activeElement;
-  document.getElementById("popupOverlay").classList.add("show");
-  document.addEventListener("keydown", onPopupKeydown);
-  const closeBtn=document.querySelector(".popup-close");
-  if(closeBtn) closeBtn.focus();
-}
-
-/* Announcements can be a plain image (a flyer/banner) or a page/PDF
-   link. Images are rendered as <img> with object-fit:contain so the
-   whole thing always scales to fit inside the popup at once; anything
-   else falls back to the iframe as before. A brief loading state
-   covers the gap while the image/page itself is still fetching. */
-function isImageUrl(url){
-  return /\.(png|jpe?g|gif|webp|bmp|svg)(\?.*)?$/i.test(url);
-}
-
-/* Announcements only interrupt once per browser session — a returning
-   visitor who already dismissed it isn't forced to see it again every
-   time they reopen the page in the same session. */
-const POPUP_SESSION_KEY="conventionPopupShown";
-
-async function showGeneralPopup(){
-  if(sessionStorage.getItem(POPUP_SESSION_KEY)==="1"){
-    return;
-  }
-  try{
-    const response=await fetch(API_URL+"?action=popup");
-    const data=await response.json();
-    if(data.status==="success" && data.popup){
-      const img=document.getElementById("popupImage");
-      const frame=document.getElementById("popupFrame");
-      const loading=document.getElementById("popupLoading");
-      loading.style.display="flex";
-      img.style.display="none";
-      frame.style.display="none";
-
-      if(isImageUrl(data.popup)){
-        frame.src="";
-        img.onload=function(){ loading.style.display="none"; img.style.display="block"; };
-        img.onerror=function(){ loading.style.display="none"; };
-        img.src=data.popup;
-      }else{
-        img.src="";
-        frame.onload=function(){ loading.style.display="none"; frame.style.display="block"; };
-        frame.src=data.popup;
-      }
-      sessionStorage.setItem(POPUP_SESSION_KEY,"1");
-      openPopup();
-    }
-  }catch(err){
-    // don't block the page if the announcement can't be fetched
-  }
-}
-
-/* Applies DOC_AVAILABILITY to whatever buttons are on the page —
-   locks any button whose key is false into a greyed-out, non-clickable
-   "Coming Soon" state. */
-function applyDocAvailability(){
-  document.querySelectorAll(".dl-btn[data-key]").forEach(function(btn){
-    const key=btn.getAttribute("data-key");
-    if(DOC_AVAILABILITY[key]){
-      btn.classList.remove("disabled");
-      btn.removeAttribute("aria-disabled");
-      btn.removeAttribute("tabindex");
-    }else{
-      btn.classList.add("disabled");
-      btn.setAttribute("aria-disabled","true");
-      btn.setAttribute("tabindex","-1");
-      btn.removeAttribute("href");
-    }
-  });
-}
-
-async function searchDoc(event){
-  if(event) event.preventDefault();
-
-  const inputEl=document.getElementById("input");
-  const value=inputEl.value.trim();
+async function searchDoc(){
+  const value=document.getElementById("input").value.trim();
   const msg=document.getElementById("msg");
   const loader=document.getElementById("loader");
   const btn=document.getElementById("btn");
-  const downloads=document.getElementById("downloads");
-  msg.className="";
   msg.innerHTML="";
-  downloads.classList.remove("show");
-  inputEl.removeAttribute("aria-invalid");
-
   if(value===""){
     msg.className="error";
-    msg.innerHTML="Please enter your Employee ID or Mobile Number.";
-    inputEl.setAttribute("aria-invalid","true");
-    inputEl.focus();
+    msg.innerHTML="Please enter your L1 code, Employee ID or Mobile Number.";
     return;
   }
-
   loader.classList.add("show");
   btn.disabled=true;
-
   try{
     const response=await fetch(API_URL+"?input="+encodeURIComponent(value));
     const data=await response.json();
     loader.classList.remove("show");
     btn.disabled=false;
-
     if(data.status==="success"){
       msg.className="success";
-      msg.innerHTML="Your personalised convention documents are ready.";
-
-      const fileMap={f1:data.f1, f2:data.f2, f3:data.f3, f4:data.f4};
-      document.querySelectorAll(".dl-btn[data-key]").forEach(function(dlBtn){
-        const key=dlBtn.getAttribute("data-key");
-        if(DOC_AVAILABILITY[key]){
-          dlBtn.href=fileMap[key];
-        }
-      });
-      applyDocAvailability();
-      downloads.classList.add("show");
+      msg.innerHTML="Agenda found! Downloading...";
+      window.open(data.url,"_blank");
     }else{
       msg.className="error";
       msg.innerHTML=data.message;
-      inputEl.setAttribute("aria-invalid","true");
     }
   }catch(err){
     loader.classList.remove("show");
     btn.disabled=false;
     msg.className="error";
-    msg.innerHTML="Unable to connect to server. Please check your internet connection and try again.";
+    msg.innerHTML="Unable to connect to server.";
   }
-}
-
-document.getElementById("lookupForm").addEventListener("submit", searchDoc);
-
-window.addEventListener("DOMContentLoaded", function(){
-  updateCountdown();
-  setInterval(updateCountdown, 20000);
-  applyDocAvailability();
-  showGeneralPopup();
-});
-
-/* ---- Badge interaction: tapping the party badge fills the whole
-   screen with confetti, gives the badge a playful wiggle, and
-   surfaces a short rotating message. The message pool depends on
-   where "today" sits relative to the convention date, so it keeps
-   making sense before, on, and after the day itself. ---- */
-const messagesUpcoming=[
-  "🎊 Can't wait to see you in London!",
-  "✨ Big Ben is counting the days too",
-  "🥂 London, we're almost there!",
-  "🎆 See you under the lights!"
-];
-const messagesTomorrow=[
-  "🎉 One more sleep till London!",
-  "🧳 Bags packed? Tomorrow's the day!",
-  "✈️ Almost wheels up for London!"
-];
-const messagesToday=[
-  "🎆 Today's the day - see you in London!",
-  "🥳 It's happening! London, here we come!",
-  "🕰️ Big Ben's ready - are you?"
-];
-const messagesPast=[
-  "🎉 Hope London was unforgettable!",
-  "📸 Thanks for making it a night to remember!",
-  "🥂 Until the next convention - cheers!"
-];
-
-function pickBadgeMessage(){
-  const days=getDaysRemaining();
-  let pool;
-  if(days>1) pool=messagesUpcoming;
-  else if(days===1) pool=messagesTomorrow;
-  else if(days===0) pool=messagesToday;
-  else pool=messagesPast;
-  return pool[Math.floor(Math.random()*pool.length)];
-}
-
-let toastTimer=null;
-
-/* Fills the entire viewport: pieces start above the top edge at random
-   x positions across the full width and fall past the bottom, each on
-   its own staggered delay, so the burst reads as "the whole page" and
-   not just a puff near the badge. */
-function fireConfettiBurst(){
-  const container=document.querySelector(".confetti");
-  const colors=["var(--gold)","#fff","var(--gold-deep)","var(--gold-light)"];
-  const w=window.innerWidth;
-  const h=window.innerHeight;
-  const count=40;
-  for(let i=0;i<count;i++){
-    const s=document.createElement("span");
-    const startX=Math.random()*w;
-    const startY=-30-Math.random()*160;
-    const fallDist=h-startY+60+Math.random()*120;
-    const drift=(Math.random()*2-1)*140;
-    const rot=Math.random()*720-360;
-    const delay=Math.random()*900;
-    const size=6+Math.random()*4;
-    s.style.position="absolute";
-    s.style.left=startX+"px";
-    s.style.top=startY+"px";
-    s.style.width=size+"px";
-    s.style.height=(size*1.8)+"px";
-    s.style.borderRadius="1px";
-    s.style.background=colors[Math.floor(Math.random()*colors.length)];
-    s.style.opacity="0";
-    container.appendChild(s);
-    (function(span, dx, dy, r, d){
-      setTimeout(function(){
-        span.style.opacity="1";
-        const anim=span.animate(
-          [
-            {transform:"translate(0,0) rotate(0deg)",opacity:1},
-            {transform:"translate("+dx+"px,"+dy+"px) rotate("+r+"deg)",opacity:0}
-          ],
-          {duration:3200+Math.random()*1600,easing:"cubic-bezier(.3,.5,.4,1)"}
-        );
-        anim.onfinish=function(){ span.remove(); };
-      }, d);
-    })(s, drift, fallDist, rot, delay);
-  }
-}
-
-function celebrateBadge(e){
-  const badge=e.currentTarget;
-  fireConfettiBurst();
-
-  badge.animate(
-    [
-      {transform:"scale(1) rotate(0deg)"},
-      {transform:"scale(1.3) rotate(-14deg)",offset:.3},
-      {transform:"scale(.92) rotate(10deg)",offset:.6},
-      {transform:"scale(1) rotate(0deg)"}
-    ],
-    {duration:550,easing:"ease-out"}
-  );
-
-  const toast=document.getElementById("toast");
-  toast.textContent=pickBadgeMessage();
-  toast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer=setTimeout(function(){ toast.classList.remove("show"); },1800);
 }
 </script>
+
 </body>
 </html>
