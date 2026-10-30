@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>MDRT Earning Opportunity</title>
+<title>Marketing Kit</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Instrument+Serif&display=swap" rel="stylesheet">
@@ -277,13 +277,13 @@ input:focus-visible{
     <h1 class="sr-only">MDRT Earning Opportunity</h1>
 
     <p class="subcopy">
-      Enter your details below to view your personalised experience
+      Enter your details below to view your Personalised Marketing Kit
     </p>
 
     <div class="input-wrap">
       <input
         id="input"
-        placeholder="Advisor code / SAP ID / Mobile No."
+        placeholder="Advisor code"
         autocomplete="off"
       >
     </div>
@@ -325,7 +325,7 @@ async function searchDoc(){
     btn.disabled=false;
     if(data.status==="success"){
       msg.className="success";
-      msg.innerHTML="Agenda found! Downloading...";
+      msg.innerHTML="Personaliseed kit found!";
       window.open(data.url,"_blank");
     }else{
       msg.className="error";
